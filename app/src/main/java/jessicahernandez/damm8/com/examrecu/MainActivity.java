@@ -1,6 +1,8 @@
 package jessicahernandez.damm8.com.examrecu;
 
+import android.content.ContentValues;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements FragmentWelcome.OnFragmentInteractionListener,
-        FragmentVerCartelera.OnFragmentInteractionListener, FragmentLogin.OnFragmentInteractionListener,
+        FragmentVerCartelera.OnFragmentInteractionListener, FragmentLogin.OnAddEquipoListener,
         FragmentHacerComentario.OnFragmentInteractionListener, FragmentComentList.OnFragmentInteractionListener {
     Toolbar toolbar;
     FragmentWelcome welcomeScreen;
@@ -20,11 +26,17 @@ public class MainActivity extends AppCompatActivity implements FragmentWelcome.O
     FragmentHacerComentario hacerComentario;
     FragmentComentList verComentarios;
 
+    List<ModelLogin> inventario = new ArrayList<>();
+    SQLiteDatabase db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        db = new MyBBDD_Helper(this).getWritableDatabase();
 
         //TOOLBAR
         toolbar = findViewById(R.id.toolbar);
@@ -72,5 +84,22 @@ public class MainActivity extends AppCompatActivity implements FragmentWelcome.O
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+
+    @Override
+    public void writeSQLite(ModelLogin nuevoUsuario) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MyBBDD_Schema.EntradaBBDD.COLUMNA1, nuevoUsuario.getUsername());
+        contentValues.put(MyBBDD_Schema.EntradaBBDD.COLUMNA2, nuevoUsuario.getPassword());
+
+        MyBBDD_Helper dbHelper = new MyBBDD_Helper(this);
+        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
+
+        sqLiteDatabase.insert(MyBBDD_Schema.EntradaBBDD.TABLE_NAME, null, contentValues);
+        sqLiteDatabase.close();
+
+        Toast.makeText(getApplicationContext(),"Usuario registrado",Toast.LENGTH_SHORT).show();
     }
 }

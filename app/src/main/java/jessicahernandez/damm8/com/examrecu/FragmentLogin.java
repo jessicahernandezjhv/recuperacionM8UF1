@@ -7,47 +7,42 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 public class FragmentLogin extends Fragment {
 
-    EditText fabricante,modelo,mac,aula;
-    Button add_equipo;
-
+    EditText usuario, password;
+    Button login;
 
     private OnAddEquipoListener mListener;
 
-    public AddEquipoFragment() {
+    public FragmentLogin() {
         // Required empty public constructor
     }
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_equipo, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        fabricante = view.findViewById(R.id.fabricanteEditText);
-        modelo = view.findViewById(R.id.modeloEditText);
-        mac = view.findViewById(R.id.MACEditText);
-        aula = view.findViewById(R.id.aulaEditText);
-        add_equipo = view.findViewById(R.id.addButton);
+        usuario = view.findViewById(R.id.usernameID);
+        password = view.findViewById(R.id.passID);
+        login = view.findViewById(R.id.btnLogin);
 
-        add_equipo.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                EquipoInformatico equipoInformatico = new EquipoInformatico(fabricante.getText().toString(),
-                        modelo.getText().toString(), mac.getText().toString(),
-                        aula.getText().toString());
+                ModelLogin nuevoUsuario = new ModelLogin(usuario.getText().toString(),
+                        password.getText().toString());
 
-                mListener.writeSQLite(equipoInformatico);
-
+                mListener.writeSQLite(nuevoUsuario);
             }
         });
-
 
         return view;
     }
@@ -82,6 +77,6 @@ public class FragmentLogin extends Fragment {
      */
     public interface OnAddEquipoListener {
         // TODO: Update argument type and name
-        void writeSQLite(EquipoInformatico equipo);
+        void writeSQLite(ModelLogin nuevoUsuario);
     }
 }
