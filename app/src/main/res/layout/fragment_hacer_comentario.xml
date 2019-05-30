@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="25dp"
+    android:orientation="vertical"
+    tools:context=".FragmentHacerComentario">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtRecomendacionID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:text="Recomiendas esta pelicula?" />
+
+        <EditText
+            android:id="@+id/edtRecomendacionID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Si / No" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtComentariosID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:text="Comentarios" />
+
+        <EditText
+            android:id="@+id/edtComentariosID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Comentarios" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnHacerComentarioID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="120dp"
+        android:text="SUBIR" />
+</LinearLayout>

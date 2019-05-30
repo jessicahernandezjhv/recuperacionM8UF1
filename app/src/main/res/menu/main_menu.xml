@@ -12,4 +12,14 @@
         android:icon="@drawable/ic_videocam_black_24dp"
         app:showAsAction="always" />
 
+    <item android:id="@+id/hacerComentarioID"
+        android:title="Hacer reserva"
+        android:icon="@drawable/ic_launcher_foreground"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/verComentID"
+        android:title="Hacer reserva"
+        android:icon="@drawable/ic_launcher_foreground"
+        app:showAsAction="always" />
+
 </menu>

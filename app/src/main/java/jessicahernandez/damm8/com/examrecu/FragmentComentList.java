@@ -3,21 +3,33 @@ package jessicahernandez.damm8.com.examrecu;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentDetallePelicula.OnFragmentInteractionListener} interface
+ * {@link FragmentComentList.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentDetallePelicula#newInstance} factory method to
+ * Use the {@link FragmentComentList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentDetallePelicula extends Fragment {
+public class FragmentComentList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,9 +39,22 @@ public class FragmentDetallePelicula extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    // Variables de elementos en pantalla
+    ProgressBar spinner;
+    RecyclerView recyclerView;
+
+    // Variables de datos obtenidos de firebase
+    ArrayList<ModelComentarios> listaComentarios;
+
+    //Variables de firebase
+    FirebaseDatabase firebaseDatabase;
+
+    // Variables para la recyclerview
+    AdapterComentarios adapter;
+
     private OnFragmentInteractionListener mListener;
 
-    public FragmentDetallePelicula() {
+    public FragmentComentList() {
         // Required empty public constructor
     }
 
@@ -39,11 +64,11 @@ public class FragmentDetallePelicula extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentDetallePelicula.
+     * @return A new instance of fragment FragmentComentList.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentDetallePelicula newInstance(String param1, String param2) {
-        FragmentDetallePelicula fragment = new FragmentDetallePelicula();
+    public static FragmentComentList newInstance(String param1, String param2) {
+        FragmentComentList fragment = new FragmentComentList();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -63,8 +88,49 @@ public class FragmentDetallePelicula extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detalle_pelicula, container, false);
+        View view = inflater.inflate(R.layout.fragment_coment_list, container, false);
+
+        listaComentarios = new ArrayList<>();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerID);
+        spinner = (ProgressBar) view.findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.VISIBLE);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new AdapterComentarios(listaComentarios);
+        recyclerView.setAdapter(adapter);
+
+        //Obtener los datos de Realtime Database
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.getReference().child("comentarios").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                ModelComentarios leerComentario;
+                leerComentario = dataSnapshot.getValue(ModelComentarios.class);
+                listaComentarios.add(leerComentario);
+                adapter.notifyDataSetChanged();
+                spinner.setVisibility(View.GONE);
+                }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

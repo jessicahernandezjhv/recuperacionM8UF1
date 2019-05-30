@@ -2,35 +2,29 @@ package jessicahernandez.damm8.com.examrecu;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentVerCartelera.OnFragmentInteractionListener} interface
+ * {@link FragmentHacerComentario.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentVerCartelera#newInstance} factory method to
+ * Use the {@link FragmentHacerComentario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentVerCartelera extends Fragment {
+public class FragmentHacerComentario extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,16 +34,19 @@ public class FragmentVerCartelera extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    ArrayList<ModelCartelera> listaPeliculas;
-    ProgressBar spinner;
-    RecyclerView recyclerCartelera;
+    EditText edtRecomendacion, edtComentario;
+    Button enviarComentario;
 
-    // Variables para la recyclerview
-    AdapterCartelera adapter;
+    // FIREBASE DATABASE
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
+
+    String databasePath = "comentarios";
+
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentVerCartelera() {
+    public FragmentHacerComentario() {
         // Required empty public constructor
     }
 
@@ -59,11 +56,11 @@ public class FragmentVerCartelera extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentVerCartelera.
+     * @return A new instance of fragment FragmentHacerComentario.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentVerCartelera newInstance(String param1, String param2) {
-        FragmentVerCartelera fragment = new FragmentVerCartelera();
+    public static FragmentHacerComentario newInstance(String param1, String param2) {
+        FragmentHacerComentario fragment = new FragmentHacerComentario();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -81,25 +78,50 @@ public class FragmentVerCartelera extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_ver_cartelera, container, false);
-        listaPeliculas = new ArrayList<>();
-        recyclerCartelera = (RecyclerView) view.findViewById(R.id.recyclerPeliculasID);
-        spinner = (ProgressBar) view.findViewById(R.id.progressBar2);
-        spinner.setVisibility(View.VISIBLE);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_hacer_comentario, container, false);
+        edtRecomendacion = view.findViewById(R.id.edtRecomendacionID);
+        edtComentario = view.findViewById(R.id.edtComentariosID);
+        enviarComentario = view.findViewById(R.id.btnHacerComentarioID);
 
-        HiloAPI hilo = new HiloAPI();
-        hilo.execute("https://jdarestaurant.firebaseio.com/peliculas.json");
+        //Firebase Database
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference(databasePath);
 
-        recyclerCartelera.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter= new AdapterCartelera(listaPeliculas);
-        recyclerCartelera.setAdapter(adapter);
+        enviarComentario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hacerComentario();
+            }
+        });
 
         return view;
+        // Inflate the layout for this fragment
     }
+
+    private void hacerComentario(){
+        final String textoRecomendacion = edtRecomendacion.getText().toString();
+        final String comentario = edtComentario.getText().toString();
+        final String nombrepeli = "default";
+
+        ModelComentarios nuevoComentario = new ModelComentarios(nombrepeli, textoRecomendacion, comentario);
+
+        // Creamos una nueva clave para introducir un elemento nuevo en firebase
+
+        String nuevoComentarioID = databaseReference.push().getKey();
+        // Creamos un hijo con esta clave e introducimos los datos del objeto HacerReservaModel
+        databaseReference.child(nuevoComentarioID).setValue(nuevoComentario);
+        Toast.makeText(getActivity(),"Comentario posteado",Toast.LENGTH_SHORT).show();
+        clearEditFields();
+    }
+
+    public void clearEditFields() {
+        SystemClock.sleep(500);
+        edtRecomendacion.getText().clear();;
+        edtComentario.getText().clear();
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -138,49 +160,5 @@ public class FragmentVerCartelera extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    class HiloAPI extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            HttpURLConnection connection;
-            URL url;
-            connection = null;
-            String result;
-            result = "";
-
-            try {
-                url = new URL(strings[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = connection.getInputStream();
-
-                int data = inputStream.read();
-                while (data != -1) {
-                    result += (char) data;
-                    data = inputStream.read();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Una vez tenemos todos los datos, los retornamos
-            Log.i("RESULT", result);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String data) {
-            super.onPostExecute(data);
-
-            try {
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            spinner.setVisibility(View.GONE);
-            adapter.notifyDataSetChanged();
-        }
     }
 }

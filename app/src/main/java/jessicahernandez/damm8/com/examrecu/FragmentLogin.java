@@ -9,76 +9,55 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentLogin.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentLogin#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentLogin extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    EditText fabricante,modelo,mac,aula;
+    Button add_equipo;
 
-    private OnFragmentInteractionListener mListener;
 
-    public FragmentLogin() {
+    private OnAddEquipoListener mListener;
+
+    public AddEquipoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentLogin.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentLogin newInstance(String param1, String param2) {
-        FragmentLogin fragment = new FragmentLogin();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_equipo, container, false);
+
+        fabricante = view.findViewById(R.id.fabricanteEditText);
+        modelo = view.findViewById(R.id.modeloEditText);
+        mac = view.findViewById(R.id.MACEditText);
+        aula = view.findViewById(R.id.aulaEditText);
+        add_equipo = view.findViewById(R.id.addButton);
+
+        add_equipo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                EquipoInformatico equipoInformatico = new EquipoInformatico(fabricante.getText().toString(),
+                        modelo.getText().toString(), mac.getText().toString(),
+                        aula.getText().toString());
+
+                mListener.writeSQLite(equipoInformatico);
+
+            }
+        });
+
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnAddEquipoListener) {
+            mListener = (OnAddEquipoListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -101,8 +80,8 @@ public class FragmentLogin extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnAddEquipoListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void writeSQLite(EquipoInformatico equipo);
     }
 }

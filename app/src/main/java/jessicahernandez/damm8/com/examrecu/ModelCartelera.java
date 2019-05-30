@@ -1,17 +1,18 @@
 package jessicahernandez.damm8.com.examrecu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModelCartelera {
     String titulo;
-    List<String> cines;
+    String cine;
 
     public ModelCartelera() {
     }
 
-    public ModelCartelera(String titulo, List<String> cines) {
+    public ModelCartelera(String titulo, String cine) {
         this.titulo = titulo;
-        this.cines = cines;
+        this.cine = cine;
     }
 
     public String getTitulo() {
@@ -22,11 +23,11 @@ public class ModelCartelera {
         this.titulo = titulo;
     }
 
-    public List<String> getCines() {
-        return cines;
+    public String getCine() {
+        return cine;
     }
 
-    public void setCines(List<String> cines) {
-        this.cines = cines;
+    public void setCine(String cine) {
+        this.cine = cine;
     }
 }

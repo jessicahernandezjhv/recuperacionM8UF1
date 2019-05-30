@@ -25,8 +25,9 @@ public class AdapterCartelera extends RecyclerView.Adapter<AdapterCartelera.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterCartelera.ViewHolderCartelera viewHolderCartelera, int i) {
-
+    public void onBindViewHolder(@NonNull AdapterCartelera.ViewHolderCartelera viewHolderCartelera, int position) {
+        viewHolderCartelera.nombrePelicula.setText(listaPeliculas.get(position).getTitulo());
+        //viewHolderCartelera.cines.setText(listaPeliculas.get(position).getCines().toString());
     }
 
     @Override
@@ -40,8 +41,7 @@ public class AdapterCartelera extends RecyclerView.Adapter<AdapterCartelera.View
         public ViewHolderCartelera(@NonNull View itemView) {
             super(itemView);
             nombrePelicula = itemView.findViewById(R.id.nombrePeliculaID);
-
+            cines = itemView.findViewById(R.id.cinesID);
         }
-
     }
 }

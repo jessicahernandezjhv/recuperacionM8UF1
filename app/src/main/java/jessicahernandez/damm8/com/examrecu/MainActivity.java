@@ -9,13 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements FragmentWelcome.OnFragmentInteractionListener, FragmentVerCartelera.OnFragmentInteractionListener, FragmentLogin.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements FragmentWelcome.OnFragmentInteractionListener,
+        FragmentVerCartelera.OnFragmentInteractionListener, FragmentLogin.OnFragmentInteractionListener,
+        FragmentHacerComentario.OnFragmentInteractionListener, FragmentComentList.OnFragmentInteractionListener {
     Toolbar toolbar;
     FragmentWelcome welcomeScreen;
     FragmentVerCartelera verCartelera;
     FragmentLogin loginScreen;
+    FragmentHacerComentario hacerComentario;
+    FragmentComentList verComentarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements FragmentWelcome.O
         welcomeScreen = new FragmentWelcome();
         verCartelera = new FragmentVerCartelera();
         loginScreen = new FragmentLogin();
+        hacerComentario = new FragmentHacerComentario();
+        verComentarios = new FragmentComentList();
 
         getSupportFragmentManager().beginTransaction().add(R.id.contenedorFragments, welcomeScreen).commit();
     }
@@ -52,6 +57,13 @@ public class MainActivity extends AppCompatActivity implements FragmentWelcome.O
             case R.id.loginID:
                 transaction.replace(R.id.contenedorFragments, loginScreen);
                 break;
+            case R.id.hacerComentarioID:
+                transaction.replace(R.id.contenedorFragments, hacerComentario);
+                break;
+            case R.id.verComentID:
+                transaction.replace(R.id.contenedorFragments, verComentarios);
+                break;
+
         }
         transaction.commit();
         return super.onOptionsItemSelected(item);
