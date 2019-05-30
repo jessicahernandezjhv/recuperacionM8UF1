@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "411905982372",
+    "firebase_url": "https://recuperacionm8uf1.firebaseio.com",
+    "project_id": "recuperacionm8uf1",
+    "storage_bucket": "recuperacionm8uf1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411905982372:android:60f6837162d1837b",
+        "android_client_info": {
+          "package_name": "jessicahernandez.damm8.com.examrecu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411905982372-e61saammjr21sbmeq6ba15ihuhunir7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk_Y4SKpkBPmy5AQCFl5cYGqvL_APXh4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411905982372-e61saammjr21sbmeq6ba15ihuhunir7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

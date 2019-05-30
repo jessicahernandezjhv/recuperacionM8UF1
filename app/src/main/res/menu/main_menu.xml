@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/loginID"
+    android:title="Ver platos"
+    android:icon="@drawable/ic_person_add_black_24dp"
+    app:showAsAction="always" />
+
+    <item android:id="@+id/verCarteleraID"
+        android:title="Hacer reserva"
+        android:icon="@drawable/ic_videocam_black_24dp"
+        app:showAsAction="always" />
+
+</menu>
