@@ -41,6 +41,8 @@ public class FragmentLogin extends Fragment {
                         password.getText().toString());
 
                 mListener.writeSQLite(nuevoUsuario);
+                usuario.getText().clear();
+                password.getText().clear();
             }
         });
 
@@ -78,5 +80,6 @@ public class FragmentLogin extends Fragment {
     public interface OnAddEquipoListener {
         // TODO: Update argument type and name
         void writeSQLite(ModelLogin nuevoUsuario);
+        void searchSQLite(String columna, String valor);
     }
 }

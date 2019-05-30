@@ -173,7 +173,19 @@ public class FragmentVerCartelera extends Fragment {
             super.onPostExecute(data);
 
             try {
+                    JSONObject jsonObject = new JSONObject(data);
+                    JSONArray jsonArray = jsonObject.getJSONArray("salas");
 
+                    for(int i=0; i<jsonArray.length(); i++) {
+                        ModelCartelera cartelera = new ModelCartelera();
+
+                        JSONObject jsonitem = jsonArray.getJSONObject(i);
+                        cartelera.setTitulo(jsonitem.getString("titulo"));
+                        cartelera.setCine(jsonitem.getString("cine"));
+
+                        listaPeliculas.add(cartelera);
+                        Log.i("Lista", cartelera.getTitulo());
+                    }
 
             } catch (Exception e) {
                 e.printStackTrace();

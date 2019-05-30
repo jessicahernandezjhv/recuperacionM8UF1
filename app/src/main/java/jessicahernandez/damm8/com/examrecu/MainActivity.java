@@ -2,6 +2,7 @@ package jessicahernandez.damm8.com.examrecu;
 
 import android.content.ContentValues;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements FragmentWelcome.O
     FragmentHacerComentario hacerComentario;
     FragmentComentList verComentarios;
 
-    List<ModelLogin> inventario = new ArrayList<>();
+    List<ModelLogin> usuariosRegistrados = new ArrayList<>();
     SQLiteDatabase db;
 
 
@@ -101,5 +102,24 @@ public class MainActivity extends AppCompatActivity implements FragmentWelcome.O
         sqLiteDatabase.close();
 
         Toast.makeText(getApplicationContext(),"Usuario registrado",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void searchSQLite(String columna, String valor) {
+        MyBBDD_Helper dbHelper = new MyBBDD_Helper(this);
+        usuariosRegistrados = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String[] columnas = { MyBBDD_Schema.EntradaBBDD.COLUMNA1};
+
+        Cursor cursor = db.query(MyBBDD_Schema.EntradaBBDD.TABLE_NAME, columnas, columna + "=?", new String[]{valor}, null, null, null);
+        while (cursor.moveToNext() ) {
+            usuariosRegistrados.add(new ModelLogin( cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA1)),
+                            cursor.getString(cursor.getColumnIndex(MyBBDD_Schema.EntradaBBDD.COLUMNA2))
+                    )
+            );
+        }
+
+
+        db.close();
     }
 }
